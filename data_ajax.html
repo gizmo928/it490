@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+<!-- https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js -->
+<script type= "text/javascript">
+
+$(document).ready(function(){
+
+  $("#A").click(function(){
+        var s = $("#zip").val();
+            
+            $.ajax ({ 
+            	  
+            		type: "GET",
+            		url: "ajax.php",
+            		data: "u=" +s,
+            		
+            		beforeSend: function(){$("#B").html("Loading...");},
+               
+            		error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
+            		success: function(result){
+               
+                       var w = JSON.parse(result);  
+                       var report = " "; 
+                       
+                       report += "HELLO";
+                     
+         <!--report += "SOMETHING: "  ; -->
+         <!-- report += "Temp: " + w["main"]["temp"]+"<br><br>" ; -->
+        
+        <!-- report += "Main: " + w["weather"][0]["main"]+"<br><br>"; -->
+        
+        <!-- report += "Description: " + w["weather"][0]["description"]+"<br><br>"  ; -->
+        
+        <!-- report += "Humidity: " + w["main"]["humidity"]+"%"+ "<br><br>"; -->
+        
+        <!-- var con = new Date(w["dt"]*1000); -->
+        <!-- report += "DT: " +con.toLocaleString()+"<br><br>"; -->
+        
+        <!-- report += "Windspeed: " + w["wind"]["speed"] + " m/s"+ "<br><br>"; -->
+        
+        <!-- var con = new Date(w["sys"]["sunrise"]*1000); -->
+         <!-- report += "Sunrise: " +con.toLocaleString()+"<br><br>"; -->
+        
+        <!-- report += "City: " + w["name"]+ "<br><br>"; -->
+         
+
+               
+                        $("#B").html(report);},
+                       
+                        
+     
+       });
+     });
+});     
+     </script>
+<style>
+
+
+#fieldset {width: 60px; margin: auto; margin-top: 4px;}
+
+
+</style>
+
+     
+     <body>
+     
+     <br><br>
+     <fieldset id = "fieldset" ><legend>Weeather</legend>
+     <input type =text name="u" id = "zip" placeholder = "Zipcode" ><br>
+     <button type=button id = "A"> Click for results </button>
+     <br><br>
+     <div id = "B" > </div>
+     <br><br>
+    </fieldset>
+     </body>
