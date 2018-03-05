@@ -41,14 +41,40 @@ function registration($email,$firstname,$lastname,$password) {
     $p = $r["email"];
     if($email == $p){
         echo "  Email has already been used";
-        return false;
+	return false; 
     }else{
           mysqli_query($db,"INSERT INTO customer (email, firstname, lastname, password) VALUES ('$email', '$firstname', '$lastname', '$password')");
 print "You have successfully registerd. Please return to login page";
-
+ 
     return true;
 }
 }
+
+
+
+function movieRetrieve($title,$photo, $releaseDate, $genre, $purchLink) {
+    ( $db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
+    if (mysqli_connect_errno())
+    {
+      echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
+      exit();
+    }
+    echo "Successfully connected to MySQL<br><br>";
+    mysqli_select_db($db, 'example' );
+    $s = "Insert into movie (title, photo, releaseDate, genre, link)  values('$title','$photo' ,'$releaseDate', '$genre', '$purchLink')";
+    
+    ( mysqli_query ($db,$s)) or die(mysqli_error($db));
+    
+}
+
+function purgeTable()
+{
+ 	$db = mysqli_connect ('localhost','root','root','example');
+	mysqli_select_db($db, 'example');
+//	$s = "drop table movie";
+//	(mysqli_query($db,$s)) or die mysqli_error($db));
+}
+
 
 function requestProcessor($request)
   {
@@ -64,16 +90,14 @@ function requestProcessor($request)
           return auth($request['user'],$request['password']);
         case "validate_session":
           return doValidate($request['sessionId']);
-         case "register":
+	 case "register":
           return registration($request['email'],$request['firstname'],$request['lastname'],$request['password']);
       }
       return array("returnCode" => '0', 'message'=>"Server received request and processed");
     }
-    $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
-    $server->process_requests('requestProcessor');
-    exit();
+    //$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+    //$server->process_requests('requestProcessor');
+    //exit();
 ?>
-
-
 
 
