@@ -71,10 +71,29 @@ function purgeTable()
 {
  	$db = mysqli_connect ('localhost','root','root','example');
 	mysqli_select_db($db, 'example');
-//	$s = "drop table movie";
+//	$s = "truncate table movie";
 //	(mysqli_query($db,$s)) or die mysqli_error($db));
 }
-
+function getData()
+{	$titles = array();
+	$releaseDates = array();
+	$genres = arraY();
+	$pics = array();
+	$purchLinks = array();
+	$db = mysqli_connect('localhost','root','root','example');
+	mysqli_select_db($db, 'example');
+	$s = "select * from movie";
+	$t = mysqli_query($db,$s) or die (mysqli_error($db));
+	while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
+	{
+	  array_push($titles, $r["title"]);
+	  array_push($releaseDates, $r["releaseDate"]);
+	  array_push($genres, $r["genre"]);
+          array_push($pics, $r["photo"]);
+	  array_push($purchLinks, $r["link"]);
+	}
+	
+}
 
 function requestProcessor($request)
   {

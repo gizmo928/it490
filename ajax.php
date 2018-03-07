@@ -23,13 +23,13 @@ for($x = 0; $x < 5; $x++)
 //	 echo $title[$x];
 	 $releaseDate[$x] = $m[$x]["releaseDate"];
 	 $genre[$x] = $m[$x]["genres"][0];
-	 $photoURL[$x] = '<div class="tile"><img src ="http://developer.tmsimg.com/'  . $m[$x]["preferredImage"]["uri"] . '?api_key=54jmnjmpmgek7ydjy7984zxq">';
-	 $purchLink[$x] =  '<a href="'. $m[$x]["showtimes"][0]["ticketURI"] . '">Purchase Link</a>';
+	 $photoURL[$x] = "http://developer.tmsimg.com/"  . $m[$x]["preferredImage"]["uri"] . "?api_key=54jmnjmpmgek7ydjy7984zxq";
+	 $purchLink[$x] =   $m[$x]["showtimes"][0]["ticketURI"];
 
 	}
 for($i = 0; $i < 5; $i++)
 {
-	movieRetrieve($title[$i],$photoURL[$i],$releaseDate[$i],$genre[$i],$purchLink[$i]);
+//	movieRetrieve($title[$i],$photoURL[$i],$releaseDate[$i],$genre[$i],$purchLink[$i]);
 }
 
 
