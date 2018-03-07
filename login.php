@@ -4,16 +4,19 @@ error_reporting(-1);
 ini_set('display_errors', true);
 
 include ('client.php');
+include('redirect.php');
 $user = $_POST['user'];
 $pass = $_POST['password'];
-echo" user is $user, pass is $pass";
 $response = connection($user,$pass);
 if($response == false)
   {
-    echo "Login Unsuccessful. Please try again or Register";
+    $message= "Login Unsuccessful. Please try again or Register";
+    redirect($message, "login.html", 3);
   }
-  else
-
-  echo "Login Successful!";
-
+  else{
+  echo "login succ!";
+  $message = "Login Successful!";
+  redirect($message, "main.html", 3);
+}
+  
 ?>
