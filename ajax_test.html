@@ -179,7 +179,8 @@ body {
   }
   
   form.ws-validate{
-  	float:right;
+  	float:left;
+	padding-left: 10px;
     display: inline-flex;
   }
   
@@ -198,24 +199,23 @@ body {
 
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <!-- https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js -->
-<script type = "text/javascript" >
+<script type = "text/javascript"  >
 
 
 $(document).ready(function(){
   $("#A").click(function(){
 
         var s = $("#zip").val();
-            
+        var o = $("#special").val();    
             $.ajax ({ 
             	  
             		type: "GET",
             		url: "ajax.php",
-            		data: "u=" +s,       		
+            		data: "u=" +o +"&uu="+s ,        		
             		               
             		error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
             		success: function(result){
 		
-		              
                        }, 
      
        });
@@ -269,25 +269,24 @@ setTimeout(hi, 7000);
      });
 });     
      </script>
-     
+    
      <body>
+<?php include 'getFunction.php'; ?> 
 
- <?php include 'getFunction.php'; ?>
 
 <div class="topnav">
 <form action="" class="ws-validate">
      
     <div class="form-row show-inputbtns" >
-        <input type="date" data-date-inline-picker="false" data-date-popover='{
+        <input type="date"  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
 	"inline": true
 }' />
     </div>
     <div class="form-rows">
-        <input type="submit" align="right" />
     </div>
 </form>
 
- <input type =text name="u" id = "zip" placeholder = "Zipcode" >
+ <input type =text name="uu" id = "zip" placeholder = "Zipcode" >
      <button type=button id = "A"> Click for results </button>
 
 

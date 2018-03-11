@@ -1,14 +1,24 @@
 <?php
-include ("functions.php"); //for movieRetrieve function
+//session_destroy();
+session_start();
+include ("newfunctions.php"); //for movieRetrieve function
 ini_set("allow_url_fopen",1);
-$ucopy = $_GET["u"];
+$ucopy = $_GET["uu"];
 $ucopy = "$ucopy";
+$day = $_GET["u"];
+$day = "$day";
+$_SESSION['zip'] = $ucopy;
 $today = date("Y-m-d"); 
 $today = "$today";
-sleep(2);
-$url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$today&zip=07011&api_key=54jmnjmpmgek7ydjy7984zxq"; 
+//sleep(2);
+//$url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$day&zip=$ucopy&api_key=54jmnjmpmgek7ydjy7984zxq"; 
 //http://api.openweathermap.org/data/2.5/weather?zip=$ucopy,us&APPID=29d9e6c71d0cc7ebbe82ad3823d9ed9b
 // http://data.tmsapi.com/v1.1/movies/showings?startDate=2018-02-24&zip=$ucopy&api_key=54jmnjmpmgek7ydjy7984zxq
+
+if(zip_check($ucopy) == false)
+{
+$url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$day&zip=$ucopy&api_key=54jmnjmpmgek7ydjy7984zxq";
+
 $json = file_get_contents($url);
 $m = json_decode($json, true);
 //echo  $m[0]["genres"][0];
@@ -29,15 +39,10 @@ for($x = 0; $x < 5; $x++)
 	}
 for($i = 0; $i < 5; $i++)
 {
-//	movieRetrieve($title[$i],$photoURL[$i],$releaseDate[$i],$genre[$i],$purchLink[$i]);
+	movieRetrieve($title[$i],$photoURL[$i],$releaseDate[$i],$genre[$i],$purchLink[$i],$day,$ucopy,$url);
 }
 
+}
+?>                                                                 
 
-//$fp = fopen ( $url , "r" ); 
-//$contents = "";
-//while ( $more = fread ( $fp, 1000  ) ) {
- //  $contents .=  $more ;
-//}
-  
-//echo $contents ; 
-?>
+
