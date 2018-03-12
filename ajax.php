@@ -26,24 +26,25 @@ $photoURL = array();
 $purchLink = array();
 for($x = 0; $x < 5; $x++)
 	{ 
-//	if(isset($m[$x]["title"]))
 	 $title[$x] = $m[$x]["title"];
-	//else {$title[$x] = "hrllo";}
-
-//	if(isset($m[$x]["releaseDate"]))
-	$releaseDate[$x] = $m[$x]["releaseDate"];
-//	else  {$releaseDate[$x] = "help me";}
 	
-//	if(isset($m[$x]["genres"]))	
-	 $genre[$x] = $m[$x]["genres"][0];
-//	else {$genre[$x] = "no genre";}
 
-//	if(isset($m[$x]["preferredImage"]["uri"]))
+	if(isset($m[$x]["releaseDate"]))
+	$releaseDate[$x] = $m[$x]["releaseDate"];
+	else $releaseDate[$x] = "noope";
+	
+	if(isset($m[$x]["genres"]))
+	 $genre[$x] = $m[$x]["genres"][0];
+	else $genre[$x] = "srry";	
+
+	//if(isset($m[$x]["preferredImage"]["uri"]))
 	 $photoURL[$x] = "http://developer.tmsimg.com/"  . $m[$x]["preferredImage"]["uri"] . "?api_key=54jmnjmpmgek7ydjy7984zxq";
 		
-//	if(isset($m[$x]["showtimes"][0]["ticketURI"]))
-	 $purchLink[$x] =   $m[$x]["showtimes"][0]["ticketURI"];
-//	else {$purchLink[$x] = "no purch link lul";}
+	if(isset($m[$x]["showtimes"][0]["ticketURI"]))
+	 $purchLink[$x] = $m[$x]["showtimes"][0]["ticketURI"];
+	else
+	$purchLink[$x] = "";
+	
 	}
 for($i = 0; $i < 5; $i++)
 {
@@ -61,7 +62,7 @@ for($i = 0; $i < 5; $i++)
         $purchLinks = array();
         $db = mysqli_connect('localhost','root','root','example');
         mysqli_select_db($db, 'example');
-        $s = "select * from movie where zipcode ='$zipcode' ";
+        $s = "select * from movie where zipcode ='$zipcode' and date_stored = '$day' ";
         $t = mysqli_query($db,$s) or die (mysqli_error($db));
         while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         {
