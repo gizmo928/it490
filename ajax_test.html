@@ -212,9 +212,37 @@ $(document).ready(function(){
             		type: "GET",
             		url: "ajax.php",
             		data: "u=" +o +"&uu="+s ,        		
-            		               
+            	               
             		error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
             		success: function(result){
+		var parsed_result = JSON.parse(result);
+	
+		var id_prefx= ['a','b','c','d','e'];
+		var element;
+	for(var i =0; i < id_prefx.length; i++)
+	{
+	   for(var j = 0; element = document.getElementById(id_prefx[i] + j);j++)
+		{      
+			if(i == 1)
+			{
+			  $(element).html('<img src ="' + parsed_result[i][j] + '">');
+			}
+			else if(i == 4)
+			{ 
+			   if(parsed_result[i][j] == "")
+			   {
+			     continue;
+			   }
+			   else
+			    $(element).html('<a href="' + parsed_result[i][j] + '">Purchase tickets</a>');
+			}
+			else
+			{
+			$(element).html(parsed_result[i][j]);
+			}
+		}
+
+	}	
 		
                        }, 
      
@@ -271,7 +299,7 @@ setTimeout(hi, 7000);
      </script>
     
      <body>
-<?php include 'getFunction.php'; ?> 
+<?php ?>
 
 
 <div class="topnav">
