@@ -243,55 +243,21 @@ $(document).ready(function(){
 		}
 
 	}	
-		
+	
+	function hi()
+	{
+		var re = '<a href="' + parsed_result[4][0] + '">Check out this hot local movie in your area ;)</a>';
+		 $("#q").html(re);
+ 		$("#qq").html("1");
+		var a = document.getElementById("q");
+		a.href = p_purchLinks[0];
+	}
+setTimeout(hi, 7000);
+
                        }, 
      
        });
 
-var p_titles = JSON.parse(titles);
-var p_pics = JSON.parse(pics);
-var p_releaseDates = JSON.parse(releaseDates);
-var p_genres = JSON.parse(genres);
-var p_purchLinks = JSON.parse(purchLinks);
-
-var element; 
-var prefix = 'e';
-
-for(var i =0; element = document.getElementById(prefix +i)  ; i++)
-{
-
-
-        $(element).html('<a href="' + p_purchLinks[i] + '">Purchase tickets</a>');
-}
-
-
-var prefix = 'b';
-
-for(var i =0; element = document.getElementById(prefix +i); i++)
-{
-
-        $(element).html('<img src ="' + p_pics[i] + '">');
-}
-
-var els = ['a','c','d'];
-var lis = [p_titles, p_genres, p_releaseDates];
-for (var j = 0; j < els.length; j++)
-{
-        for (var k =0; element = document.getElementById(els[j] + k); k++)
-        {
-                $(element).html(lis[j][k]);
-        }
-}
-
-function hi()
-{
-var re = '<a href="' + p_purchLinks[0] + '">Check out this hot local movie in your area ;)</a>';
- $("#q").html(re);
- $("#qq").html("1");
-var a = document.getElementById("q");
-a.href = p_purchLinks[0];
-}
-setTimeout(hi, 7000);
 
 
      });
@@ -299,7 +265,6 @@ setTimeout(hi, 7000);
      </script>
     
      <body>
-<?php ?>
 
 
 <div class="topnav">

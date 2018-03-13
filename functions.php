@@ -84,7 +84,9 @@ $num = mysqli_num_rows($t);
          	$releaseDate[$x] = $m[$x]["releaseDate"];
          	$genre[$x] = $m[$x]["genres"][0];
          	$photoURL[$x] = "http://developer.tmsimg.com/"  . $m[$x]["preferredImage"]["uri"] . "?api_key=54jmnjmpmgek7ydjy7984zxq";
-         	$purchLink[$x] =   $m[$x]["showtimes"][0]["ticketURI"];
+         	if(isset($m[$x]["showtimes"][0]["ticketURI"]))
+	$purchLink[$x] =   $m[$x]["showtimes"][0]["ticketURI"];
+	else $purchLink[$x] = "";
        	   }
 	for($z = 0; $z <5 ; $z++)
 	{
