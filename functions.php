@@ -51,48 +51,79 @@ print "You have successfully registerd. Please return to login page";
 }
 
 
+function store_data($date, $zipcode)
+{
 
-function movieRetrieve($title,$photo, $releaseDate, $genre, $purchLink) {
-    ( $db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
+ini_set("allow_url_fopen",1);
+
+ ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
       echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
       exit();
     }
-    echo "Successfully connected to MySQL<br><br>";
+   
     mysqli_select_db($db, 'example' );
-    $s = "Insert into movie (title, photo, releaseDate, genre, link)  values('$title','$photo' ,'$releaseDate', '$genre', '$purchLink')";
-    
-    ( mysqli_query ($db,$s)) or die(mysqli_error($db));
-    
+$url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$date&zip=$zipcode&api_key=54jmnjmpmgek7ydjy7984zxq";
+$json = file_get_contents($url);
+$m = json_decode($json, true);
+$title = array();
+$releaseDate= array();
+$genre = array();
+$photoURL = array();
+$purchLink = array();
+ 
+$s = "select * from movie where zipcode = '$zipcode' AND date_stored = '$date'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+$num = mysqli_num_rows($t);
+    if ($num == 0)
+	{
+     	 for($x = 0; $x < 5; $x++)
+          {
+ 		$title[$x] = $m[$x]["title"];
+         	$releaseDate[$x] = $m[$x]["releaseDate"];
+         	$genre[$x] = $m[$x]["genres"][0];
+         	$photoURL[$x] = "http://developer.tmsimg.com/"  . $m[$x]["preferredImage"]["uri"] . "?api_key=54jmnjmpmgek7ydjy7984zxq";
+         	$purchLink[$x] =   $m[$x]["showtimes"][0]["ticketURI"];
+       	   }
+	for($z = 0; $z <5 ; $z++)
+	{
+        	$t = $title[$z];
+       		$p = $photoURL[$z];
+        	$r = $releaseDate[$z];
+        	$g = $genre[$z];
+        	$pu = $purchLink[$z];
+        	mysqli_query($db, "Insert into movie (title, photo, releaseDate, genre, link, date_stored, zipcode, url)  values('$t','$p' ,'$r', '$g', '$pu','$date','$zipcode','$url')");
+        }
+    }
 }
 
-function purgeTable()
-{
- 	$db = mysqli_connect ('localhost','root','root','example');
-	mysqli_select_db($db, 'example');
-//	$s = "truncate table movie";
-//	(mysqli_query($db,$s)) or die mysqli_error($db));
-}
-function getData()
-{	$titles = array();
-	$releaseDates = array();
-	$genres = arraY();
-	$pics = array();
-	$purchLinks = array();
-	$db = mysqli_connect('localhost','root','root','example');
-	mysqli_select_db($db, 'example');
-	$s = "select * from movie";
-	$t = mysqli_query($db,$s) or die (mysqli_error($db));
-	while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
-	{
-	  array_push($titles, $r["title"]);
-	  array_push($releaseDates, $r["releaseDate"]);
-	  array_push($genres, $r["genre"]);
+function retrieveData($date, $zipcode){
+($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
+    if (mysqli_connect_errno())
+    {
+      echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
+      exit();
+    }
+    
+    mysqli_select_db($db, 'example' );
+$titles = array();
+$releaseDates = array();
+$genres = array();
+$pics = array();
+$purchLinks = array();
+$s = "select * from movie where zipcode = '$zipcode' AND date_stored = '$date'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
+        {
+          array_push($titles, $r["title"]);
+          array_push($releaseDates, $r["releaseDate"]);
+          array_push($genres, $r["genre"]);
           array_push($pics, $r["photo"]);
-	  array_push($purchLinks, $r["link"]);
-	}
-	
+          array_push($purchLinks, $r["link"]);
+        }
+$result = array($titles, $pics, $releaseDates, $genres, $purchLinks);
+return $result;
 }
 
 function requestProcessor($request)
@@ -109,14 +140,18 @@ function requestProcessor($request)
           return auth($request['user'],$request['password']);
         case "validate_session":
           return doValidate($request['sessionId']);
-	 case "register":
+	case "register":
           return registration($request['email'],$request['firstname'],$request['lastname'],$request['password']);
+	case "apicall":
+	 return store_data($request['today'],$request['zipcode']);
+	case "getData": 
+	  return retrieveData($request['today'],$request['zipcode']);
       }
       return array("returnCode" => '0', 'message'=>"Server received request and processed");
     }
-    //$server = new rabbitMQServer("testRabbitMQ.ini","testServer");
-    //$server->process_requests('requestProcessor');
-    //exit();
+    $server = new rabbitMQServer("testRabbitMQ.ini","testServer");
+    $server->process_requests('requestProcessor');
+    exit();
 ?>
 
 
