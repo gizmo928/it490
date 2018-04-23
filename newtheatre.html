@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.9.1.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+ 
+      <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-combined.min.css">
+
+  <style type="text/css">
+    .template { display: none; }
+  </style>
+
+  <title></title>
+
+<script type="text/javascript">
+$(window).load(function(){
+ $.ajax ({ 
+                  
+               type: "GET",
+               url: "theatre_location.php",
+                                               
+                               
+               error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
+               success: function(result){
+                var parsed_result = JSON.parse(result);
+$.each(parsed_result, function()
+{
+
+
+
+        var theatre =this["theatre"];
+        var showtime = "";
+	
+        for (var i = 0; i < this["showtimes"].length; i++)
+        {  
+	   var h = "AM";
+	   var splitter = this["showtimes"][i].split(":"); // split to get hours alone
+
+	   if (splitter[0] >=12)
+	   {
+	    if(splitter[0] > 12)
+	    splitter[0]= splitter[0] - 12;
+	    h = "PM"; 
+	    showtime += splitter[0] + ':' + splitter[1] + h + '&emsp;';
+	   }
+
+	  else
+	  {
+	   showtime += (this["showtimes"][i]  ) ;
+           showtime = showtime + h + '&emsp;';    
+          } 
+
+	}
+    $("tbody").append('  <tr> <td >' + theatre + '</td>  <td >' + showtime + '  </td> </tr> ');
+});
+
+
+	},
+
+});
+
+// ================= GENERATE DUMMY TABLE
+//var n = 0;
+//var TOTAL_ROWS = 30;
+//for (var i = 0; i < TOTAL_ROWS; ++i) {
+ //   appendItem();
+//}
+
+
+//function appendItem() {
+//	var d = "";
+    //var item = $(".template").clone().removeClass("template");
+   // item.find(".num").text(++n);
+    //item.addClass(++n);
+    //item.hide();
+//	var rp = "aMC :)";
+//	var timelist = ["10","12"];
+//	for (var i = 0; i < timelist.length; i++)
+//	{  d += timelist[i] ;
+//	   d = d + '&emsp;';	
+//	}
+  //  $("tbody").append('  <tr> <td >' + rp + '</td>  <td >' + d + '  </td> </tr> ');
+	
+
+
+
+//}
+
+// ================= SHOW ONLY FEW ROWS BY DEFAULT
+
+
+var howMany = 3;
+showDefaultRows();
+
+
+function showDefaultRows() {
+    var complete = 0;
+
+    $(".table-item").each(function () {
+        
+        if (++complete > howMany) {
+            return;
+        }
+        $(this).show();
+    });
+}
+
+// ================= ON CLICK
+
+$(".btn").on("click", function () {
+    
+    var complete = 0;
+    var showMore = 5;
+    howMany += showMore;
+    $(".table-item").each(function () {
+        if (++complete > howMany) {
+            return;
+        }
+       
+        $(this).fadeIn();
+    });
+});
+
+
+});
+
+</script>
+
+</head>
+
+<body>
+
+
+
+
+
+<div class="container">
+ <img src="https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/masterrepository/Fandango/199925/AvengersInfinityWar-postera.jpg"align="left"height="250">
+  <h2>The Avengers</h2>
+  <p>PG-13, 2 hr 29 min</p>
+  <p>Iron Man, Thor, the Hulk and the rest of the Avengers unite to battle their most powerful enemy yet -- the evil Thanos. On a mission to collect all six Infinity Stones, Thanos plans to use the artifacts to inflict his twisted will on reality. The fate of the planet and existence itself has never been more uncertain as everything the Avengers have fought for has led up to this moment.</p>
+  <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Theater</th>
+                  <th>Showtime</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="template">
+		
+                      <td id = "theatre">what?</td>
+                      <td id="st" > 9:00 &ensp; 10:00  </td>
+		      
+                </tr>
+              </tbody>
+            </table>
+
+<button class="btn">Show more</button>
+  
+  <script>
+  // tell the embed parent frame the height of the content
+  if (window.parent && window.parent.parent){
+    window.parent.parent.postMessage(["resultsFrame", {
+      height: document.body.getBoundingClientRect().height,
+      slug: "kf78s"
+    }], "*")
+  }
+</script>
+
+</body>
+
+</html>
+
