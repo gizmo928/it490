@@ -33,35 +33,56 @@ $(window).load(function(){
                                
                error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
                success: function(result){
-                var parsed_result = JSON.parse(result);
-$.each(parsed_result, function()
+               var parsed_result = JSON.parse(result);
+$("#title").html(parsed_result["b"][0]["title"]);// ["0"] works same as [0]
+var fixedDateAR = parsed_result["b"][0]["release_date"].split("-");
+$("#rd").html ('Released on ' + fixedDateAR[1] + '-' + fixedDateAR[2] + '-' + fixedDateAR[0]); 
+
+$("#photo").html('<img src ="' + parsed_result["b"][0]["photo"] + '">')
+$("#desc").html(parsed_result["b"][0]["description"]);
+$("#rNrt").html(parsed_result["b"][0]["mpaa"] + ', ' + parsed_result["b"][0]["hours"] +  '&ensp;' + parsed_result["b"][0]["mins"] );
+
+ 
+$.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatre names, showtimes, and purchase links )
 {
-
-
-
         var theatre =this["theatre"];
         var showtime = "";
-	
+	var link1 = "<a href='";	
         for (var i = 0; i < this["showtimes"].length; i++)
-        {  
+        { //if this[link][i] == null then skip? else configure it through html 
 	   var h = "AM";
 	   var splitter = this["showtimes"][i].split(":"); // split to get hours alone
+	
+	   //if(this["link"][i] == null)
+		 
 
-	   if (splitter[0] >=12)
-	   {
-	    if(splitter[0] > 12)
-	    splitter[0]= splitter[0] - 12;
-	    h = "PM"; 
-	    showtime += splitter[0] + ':' + splitter[1] + h + '&emsp;';
-	   }
+	   	if (splitter[0] >=12)
+	   	{
+		    	if(splitter[0] > 12)
+	    		{splitter[0]= splitter[0] - 12;}
+	    	h = "PM"; 
+	      		if(this["link"][i] == null) // leave it blank else add the html and do the same for the bottom half duplicate it
+			{showtime += splitter[0] + ':' + splitter[1] + h + '&emsp;';}
+			else 
+			{showtime += link1 + this["link"][i] + "'>" + splitter[0] + ':' + splitter[1] + h  + '</a>' + '&emsp;';}
+			
+	  	 }
 
-	  else
-	  {
-	   showtime += (this["showtimes"][i]  ) ;
-           showtime = showtime + h + '&emsp;';    
-          } 
+	  	else
+	  	{
+			if(this["link"][i] == null)
+           		{showtime += (this["showtimes"][i]  ) ;
+
+			showtime = showtime + h + '&emsp;';} // if no link then just 12:00AM
+			else
+			{showtime += (this["showtimes"][i]  ) ;
+
+			showtime = link1 + this["link"][i] + "'>" + showtime + h  + '</a>' + '&emsp;';}   //had showtime +=, works currently without it 
+          	} 
 
 	}
+
+	
     $("tbody").append('  <tr> <td >' + theatre + '</td>  <td >' + showtime + '  </td> </tr> ');
 });
 
@@ -99,7 +120,7 @@ $.each(parsed_result, function()
 
 // ================= SHOW ONLY FEW ROWS BY DEFAULT
 
-
+/*
 var howMany = 3;
 showDefaultRows();
 
@@ -115,9 +136,9 @@ function showDefaultRows() {
         $(this).show();
     });
 }
-
+*/
 // ================= ON CLICK
-
+/*
 $(".btn").on("click", function () {
     
     var complete = 0;
@@ -130,7 +151,7 @@ $(".btn").on("click", function () {
        
         $(this).fadeIn();
     });
-});
+}); */
 
 
 });
@@ -146,10 +167,11 @@ $(".btn").on("click", function () {
 
 
 <div class="container">
- <img src="https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/masterrepository/Fandango/199925/AvengersInfinityWar-postera.jpg"align="left"height="250">
-  <h2>The Avengers</h2>
-  <p>PG-13, 2 hr 29 min</p>
-  <p>Iron Man, Thor, the Hulk and the rest of the Avengers unite to battle their most powerful enemy yet -- the evil Thanos. On a mission to collect all six Infinity Stones, Thanos plans to use the artifacts to inflict his twisted will on reality. The fate of the planet and existence itself has never been more uncertain as everything the Avengers have fought for has led up to this moment.</p>
+ <img id="photo" align="left"height="250">
+  <h2 id = "title">The Avengers</h2>
+  <p id = "rd" > </p>
+  <p id = "rNrt">PG-13, 2 hr 29 min</p>
+  <p id ="desc">Iron Man, Thor, the Hulk and the rest of the Avengers unite to battle their most powerful enemy yet -- the evil Thanos. On a mission to collect all six Infinity Stones, Thanos plans to use the artifacts to inflict his twisted will on reality. The fate of the planet and existence itself has never been more uncertain as everything the Avengers have fought for has led up to this moment.</p>
   <table class="table table-hover">
               <thead>
                 <tr>

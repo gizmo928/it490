@@ -64,12 +64,10 @@ ini_set("allow_url_fopen",1);
     }
    
     mysqli_select_db($db, 'example' );
-$ld = " In 2045, the planet is on the brink of chaos and collapse, but people find salvation in the OASIS, an expansive virtual reality universe created by James Halliday. When Halliday dies, he promises his immense fortune to the first person to discover a digital Easter egg that's hidden somewhere in the OASIS. When young Wade Watts joins the contest, he finds himself becoming an unlikely hero in a reality-bending treasure hunt through a fantastical world of mystery, discovery and danger.";
 
-$ld = mysqli_real_escape_string($db,$ld);
 $url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$date&zip=$zipcode&api_key=54jmnjmpmgek7ydjy7984zxq";
 $json = file_get_contents($url);
-$m = json_decode($json, true);
+$m = json_decode($json, true); // was $m
 $title = array();
 $releaseDate= array();
 $genre = array();
@@ -85,7 +83,8 @@ $t = mysqli_query($db,$s) or die (mysqli_error($db));
 $num = mysqli_num_rows($t);
     if ($num == 0)
 	{
-     	 for($x = 0; $x < 5; $x++)
+	     	
+	 for($x = 0; $x < count($m); $x++)
           {
  		$title[$x] = $m[$x]["title"];
 		$title[$x] = mysqli_real_escape_string($db, $title[$x]);
@@ -114,8 +113,13 @@ $num = mysqli_num_rows($t);
 		$name = mysqli_real_escape_string($db, $name);
 		$time = $val["dateTime"];
 		$time = substr($time,11, 5);
+	if(isset($val["ticketURI"])){
+		$link = $val["ticketURI"];
+		$link= "'$link'";
+		}
+	else {$link = "NULL"; }
 		mysqli_query($db, "Insert into theatres (theatre_id, theatre_name, zipcode) values ('$id', '$name', '$zipcode')");
-		mysqli_query($db, "Insert into showtimes (theatre_id, theatre_name, title, date, time) values ('$id', '$name', '$title[$x]','$date','$time')");
+		mysqli_query($db, "Insert into showtimes (theatre_id, theatre_name, title, date, time, link) values ('$id', '$name', '$title[$x]','$date','$time', $link)");
 
 		}
 
@@ -130,7 +134,7 @@ $num = mysqli_num_rows($t);
 // mysqli_query($db, "Insert into movie_info (title, photo, release_date, mpaa, hours, mins, description) values ('$title[$x]', '$photoURL[$x]', '$releaseDate[$x]','$rating[$x]', '$hours[$x]', '$mins[$x]',   '$desc[$x]')");
        	   }
 
-	for($z = 0; $z <5 ; $z++)
+	for($z = 0; $z < count($m) ; $z++)
 	{
         	$t = $title[$z];
        		$p = $photoURL[$z];
@@ -172,6 +176,33 @@ while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         }
 $result = array($titles, $pics, $releaseDates, $genres, $purchLinks);
 return $result;
+}
+
+function stData()
+{
+//NEED TO PASS IN MOVIE TITLE, DATE, AND ZIPCODE
+($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
+    if (mysqli_connect_errno())
+    {
+      echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
+      exit();
+    }
+
+    mysqli_select_db($db, 'example' );
+$a1 = array();
+
+$s = "select showtimes.theatre_name, showtimes.title, showtimes.time from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= 'Rampage' and showtimes.date = '2018-04-16' and theatres.zipcode = '07011'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
+        {
+	 // array_push($a1, $r["theatre_name"], $r["title"], $r["time"]);
+          array_push($a1, $r);
+          
+         
+        }
+
+return $a1;
+
 }
 
 function requestProcessor($request)

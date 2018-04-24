@@ -10,7 +10,7 @@
     mysqli_select_db($db, 'example' );
 $a1 = array();
 
-$s = "select showtimes.theatre_name, showtimes.title, showtimes.time from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= 'Rampage' and showtimes.date = '2018-04-16' and theatres.zipcode = '07011'";
+$s = "select showtimes.theatre_name, showtimes.time, showtimes.link from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= 'A Quiet Place' and showtimes.date = '2018-04-23' and theatres.zipcode = '07011'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         {
@@ -21,7 +21,9 @@ while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
 
 $b1 = array();
 $c1 = array();
+$e1 = array();//added for purchase links
 $d1 = array();
+$f1 = array();
 for ($i =0; $i < (count($a1)); $i++)
 {
 
@@ -33,14 +35,17 @@ if (!in_array($a1[$i]['theatre_name'], $b1) || $i == (count($a1) - 1))
 		{
 	//	array_push($b1, $a1[$i]['theatre_name'], $c1);
 		array_push($c1, $a1[$i]['time']);
-		array_push($d1, array("theatre" => $a1[$i]['theatre_name'], "showtimes" => $c1));
+		array_push($e1, $a1[$i]['link']);
+		array_push($d1, array("theatre" => $a1[$i]['theatre_name'], "showtimes" => $c1, "link" => $e1));
 		$c1 = array();
+		$e1 = array();
 		}
 
 		else if(!empty($b1))
 		{
-		array_push($d1, array("theatre" => $a1[$i-1]['theatre_name'], "showtimes" => $c1));
+		array_push($d1, array("theatre" => $a1[$i-1]['theatre_name'], "showtimes" => $c1, "link" => $e1));
                 $c1 = array();
+		$e1 = array();
 		}
 
 		 array_push($b1, $a1[$i]['theatre_name']);// had , c1
@@ -48,10 +53,19 @@ if (!in_array($a1[$i]['theatre_name'], $b1) || $i == (count($a1) - 1))
 	}
 
 array_push($c1, $a1[$i]['time']);
+array_push($e1, $a1[$i]['link']);
+
 
 }
 
-echo json_encode($d1);
+$s = "select * from movie_info where title = 'A Quiet Place'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+   
+array_push($f1, $r);
+//echo json_encode($f1);
+
+echo json_encode(array("a" => $d1, "b" => $f1));
 
 
 ?>
