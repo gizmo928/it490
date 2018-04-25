@@ -24,12 +24,14 @@
   <title></title>
 
 <script type="text/javascript">
+ var movie = "<?php $movie = $_GET['title']; echo $movie ?>";
+
 $(window).load(function(){
  $.ajax ({ 
                   
                type: "GET",
                url: "theatre_location.php",
-                                               
+               data: "title=" +  movie,                                
                                
                error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
                success: function(result){
@@ -40,7 +42,12 @@ $("#rd").html ('Released on ' + fixedDateAR[1] + '-' + fixedDateAR[2] + '-' + fi
 
 $("#photo").html('<img src ="' + parsed_result["b"][0]["photo"] + '">')
 $("#desc").html(parsed_result["b"][0]["description"]);
-$("#rNrt").html(parsed_result["b"][0]["mpaa"] + ', ' + parsed_result["b"][0]["hours"] +  '&ensp;' + parsed_result["b"][0]["mins"] );
+var rating = parsed_result["b"][0]["mpaa"];
+if(rating == null)
+{
+rating = "NR";
+}//havent test this out
+$("#rNrt").html(rating + ', ' + parsed_result["b"][0]["hours"] +  '&ensp;' + parsed_result["b"][0]["mins"]  );
 
  
 $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatre names, showtimes, and purchase links )
@@ -83,75 +90,13 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 	}
 
 	
-    $("tbody").append('  <tr> <td >' + theatre + '</td>  <td >' + showtime + '  </td> </tr> ');
+    $("tbody").append('  <tr> <td >' + theatre + '</td>  <td >' + showtime + '  </td><hr> </tr> <hr> ');
 });
 
 
 	},
 
 });
-
-// ================= GENERATE DUMMY TABLE
-//var n = 0;
-//var TOTAL_ROWS = 30;
-//for (var i = 0; i < TOTAL_ROWS; ++i) {
- //   appendItem();
-//}
-
-
-//function appendItem() {
-//	var d = "";
-    //var item = $(".template").clone().removeClass("template");
-   // item.find(".num").text(++n);
-    //item.addClass(++n);
-    //item.hide();
-//	var rp = "aMC :)";
-//	var timelist = ["10","12"];
-//	for (var i = 0; i < timelist.length; i++)
-//	{  d += timelist[i] ;
-//	   d = d + '&emsp;';	
-//	}
-  //  $("tbody").append('  <tr> <td >' + rp + '</td>  <td >' + d + '  </td> </tr> ');
-	
-
-
-
-//}
-
-// ================= SHOW ONLY FEW ROWS BY DEFAULT
-
-/*
-var howMany = 3;
-showDefaultRows();
-
-
-function showDefaultRows() {
-    var complete = 0;
-
-    $(".table-item").each(function () {
-        
-        if (++complete > howMany) {
-            return;
-        }
-        $(this).show();
-    });
-}
-*/
-// ================= ON CLICK
-/*
-$(".btn").on("click", function () {
-    
-    var complete = 0;
-    var showMore = 5;
-    howMany += showMore;
-    $(".table-item").each(function () {
-        if (++complete > howMany) {
-            return;
-        }
-       
-        $(this).fadeIn();
-    });
-}); */
 
 
 });
@@ -168,11 +113,11 @@ $(".btn").on("click", function () {
 
 <div class="container">
  <img id="photo" align="left"height="250">
-  <h2 id = "title">The Avengers</h2>
+  <h2 id = "title"></h2>
   <p id = "rd" > </p>
-  <p id = "rNrt">PG-13, 2 hr 29 min</p>
-  <p id ="desc">Iron Man, Thor, the Hulk and the rest of the Avengers unite to battle their most powerful enemy yet -- the evil Thanos. On a mission to collect all six Infinity Stones, Thanos plans to use the artifacts to inflict his twisted will on reality. The fate of the planet and existence itself has never been more uncertain as everything the Avengers have fought for has led up to this moment.</p>
-  <table class="table table-hover">
+  <p id = "rNrt"></p>
+  <p id ="desc"> </p>
+ <table class="table table-hover">
               <thead>
                 <tr>
                   <th>Theater</th>
@@ -182,14 +127,15 @@ $(".btn").on("click", function () {
               <tbody>
                 <tr class="template">
 		
-                      <td id = "theatre">what?</td>
-                      <td id="st" > 9:00 &ensp; 10:00  </td>
-		      
-                </tr>
+                      <td id = "theatre"></td>
+                      <td id="st" >   </td>
+		     
+                </tr> 
               </tbody>
+	
             </table>
 
-<button class="btn">Show more</button>
+
   
   <script>
   // tell the embed parent frame the height of the content

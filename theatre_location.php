@@ -1,5 +1,14 @@
 <?php
-
+session_start();
+if(!isset($_SESSION["user"]))
+{
+        header("Refresh:1; url=main.html", true, 303);
+}
+$movie =  $_GET['title'];
+//echo " movie is: $movie";
+//$movie = mysqli_real_escape_string($movie);
+//$date = $_SESSION["date"];
+//$zip = $_SESSION["zipcode"];
 ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
@@ -9,8 +18,9 @@
 
     mysqli_select_db($db, 'example' );
 $a1 = array();
+$movie = mysqli_real_escape_string($db,$movie);
 
-$s = "select showtimes.theatre_name, showtimes.time, showtimes.link from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= 'A Quiet Place' and showtimes.date = '2018-04-23' and theatres.zipcode = '07011'";
+$s = "select showtimes.theatre_name, showtimes.time, showtimes.link from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= '$movie' and showtimes.date = '2018-04-25' and theatres.zipcode = '07011'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         {
@@ -58,7 +68,7 @@ array_push($e1, $a1[$i]['link']);
 
 }
 
-$s = "select * from movie_info where title = 'A Quiet Place'";
+$s = "select * from movie_info where title = '$movie'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
    

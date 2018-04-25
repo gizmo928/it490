@@ -13,7 +13,6 @@ function auth($u, $v) {
     echo "Successfully connected to MySQL<br><br>";
     mysqli_select_db($db, 'example' );
     $s = "select * from customer where user = '$u' and password = '$v'";
-    //echo "The SQL statement is $s";
     ($t = mysqli_query ($db,$s)) or die(mysqli_error($db));
     $num = mysqli_num_rows($t);
     if ($num == 0){
@@ -26,7 +25,7 @@ function auth($u, $v) {
 }
 
 
-function registration($email,$firstname,$lastname,$password) {
+function registration($email,$firstname,$lastname,$password, $user, $zipcode) {
     ( $db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
@@ -35,25 +34,27 @@ function registration($email,$firstname,$lastname,$password) {
     }
     echo "Successfully connected to MySQL";
     mysqli_select_db($db, 'example' );
-    $e = "SELECT * FROM customer WHERE email = '$email'";
+    $e = "SELECT * FROM customer WHERE email = '$email'"; // should be and user=
     $t = mysqli_query($db, $e) or die(mysqli_error($db));
     $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
     $p = $r["email"];
+    
     if($email == $p){
-        echo "  Email has already been used";
+        echo "  Email or User has already been used.  Please try registering again.";
 	return false; 
-    }else{
-          mysqli_query($db,"INSERT INTO customer (email, firstname, lastname, password) VALUES ('$email', '$firstname', '$lastname', '$password')");
-print "You have successfully registerd. Please return to login page";
+    }
+  
+	else{
+          mysqli_query($db,"INSERT INTO customer (email, firstname, lastname, password, user, zipcode) VALUES ('$email', '$firstname', '$lastname', '$password','$user', '$zipcode')");
+print "Thankss";
  
     return true;
 }
 }
 
 
-function store_data($date, $zipcode)
+function store_data($date, $user)// this will be user not zipcode, get zip from mysql
 {
-
 ini_set("allow_url_fopen",1);
 
  ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
@@ -64,7 +65,12 @@ ini_set("allow_url_fopen",1);
     }
    
     mysqli_select_db($db, 'example' );
-
+$s = "Select * from customer where user = '$user'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+$zipcode = $r['zipcode'];
+$zipcode ="$zipcode";
+//$_SESSION["zipcode"] = $zipcode;
 $url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$date&zip=$zipcode&api_key=54jmnjmpmgek7ydjy7984zxq";
 $json = file_get_contents($url);
 $m = json_decode($json, true); // was $m
@@ -96,7 +102,10 @@ $num = mysqli_num_rows($t);
                 }
 		$desc[$x]= $m[$x]["longDescription"];
 		$desc[$x] = mysqli_real_escape_string($db,$desc[$x]);
+		if(isset($m[$x]["ratings"][0]["code"])){
 		$rating[$x] = $m[$x]["ratings"][0]["code"];
+				$rating[$x] = "'$rating[$x]'";} // if rating is set then set it to rating, else set rating to null
+		else { $rating[$x] = "NULL"; }
 		$runTime[$x] = $m[$x]["runTime"];
 		$hours[$x] = substr($runTime[$x], 2, 3);
 		$mins[$x] = substr($runTime[$x], 5, 6);
@@ -141,16 +150,16 @@ $num = mysqli_num_rows($t);
         	$r = $releaseDate[$z];
 		$g = $genre[$z];
 		$pu = $purchLink[$z];
-        	mysqli_query($db, "Insert into movie (title, photo, releaseDate, genre,  link, date_stored, zipcode)  values('$t','$p' ,'$r','$g', '$pu','$date','$zipcode')") or die(mysqli_error($db));
-		
+        	mysqli_query($db, "Insert into movie (title, photo, releaseDate, date_stored, zipcode)  values('$t','$p', '$pu','$date','$zipcode')") or die(mysqli_error($db));
+	// maybe we can use the movie tables to check which queries went through i.e zipcode and date	
 
-		mysqli_query($db, "Insert into movie_info (title, photo, release_date, mpaa, hours, mins, description) values ('$title[$z]', '$photoURL[$z]', '$releaseDate[$z]','$rating[$z]', '$hours[$z]', '$mins[$z]', '$desc[$z]') ON DUPLICATE KEY UPDATE title=title") or die (mysqli_error($db));
+		mysqli_query($db, "Insert into movie_info (title, photo, release_date, mpaa, hours, mins, description) values ('$title[$z]', '$photoURL[$z]', '$releaseDate[$z]',$rating[$z], '$hours[$z]', '$mins[$z]', '$desc[$z]') ON DUPLICATE KEY UPDATE title=title") or die (mysqli_error($db));
 
         }
     }
 }
 
-function retrieveData($date, $zipcode){
+function retrieveData($date, $user){
 ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
@@ -159,49 +168,38 @@ function retrieveData($date, $zipcode){
     }
     
     mysqli_select_db($db, 'example' );
-$titles = array();
-$releaseDates = array();
-$genres = array();
-$pics = array();
-$purchLinks = array();
-$s = "select * from movie where zipcode = '$zipcode' AND date_stored = '$date'";
+
+$s = "Select * from customer where user = '$user'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+$zipcode = $r['zipcode'];
+$a0 =array();
+$s=" select distinct movie_info.title, movie_info.photo from movie_info join showtimes on movie_info.title = showtimes.title join theatres on showtimes.theatre_name = theatres.theatre_name where showtimes.date = '$date' and theatres.zipcode = '$zipcode'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         {
-          array_push($titles, $r["title"]);
-          array_push($releaseDates, $r["releaseDate"]);
-          array_push($genres, $r["genre"]);
-          array_push($pics, $r["photo"]);
-          array_push($purchLinks, $r["link"]);
+	 array_push($a0, array("title" => $r["title"], "photo" => $r["photo"]));
         }
-$result = array($titles, $pics, $releaseDates, $genres, $purchLinks);
-return $result;
+
+return $a0;
 }
 
-function stData()
+function stData($date, $zipcode, $movie)
 {
-//NEED TO PASS IN MOVIE TITLE, DATE, AND ZIPCODE
-($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
-    if (mysqli_connect_errno())
-    {
-      echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
-      exit();
-    }
 
-    mysqli_select_db($db, 'example' );
-$a1 = array();
 
-$s = "select showtimes.theatre_name, showtimes.title, showtimes.time from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= 'Rampage' and showtimes.date = '2018-04-16' and theatres.zipcode = '07011'";
-$t = mysqli_query($db,$s) or die (mysqli_error($db));
-while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
-        {
-	 // array_push($a1, $r["theatre_name"], $r["title"], $r["time"]);
-          array_push($a1, $r);
-          
-         
-        }
 
-return $a1;
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -220,7 +218,7 @@ function requestProcessor($request)
         case "validate_session":
           return doValidate($request['sessionId']);
 	case "register":
-          return registration($request['email'],$request['firstname'],$request['lastname'],$request['password']);
+          return registration($request['email'],$request['firstname'],$request['lastname'],$request['password'], $request['user'], $request['zipcode']);
 	case "apicall":
 	 return store_data($request['today'],$request['zipcode']);
 	case "getData": 
