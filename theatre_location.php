@@ -5,22 +5,24 @@ if(!isset($_SESSION["user"]))
         header("Refresh:1; url=main.html", true, 303);
 }
 $movie =  $_GET['title'];
-//echo " movie is: $movie";
-//$movie = mysqli_real_escape_string($movie);
-//$date = $_SESSION["date"];
-//$zip = $_SESSION["zipcode"];
+$date = $_SESSION["date"];
+$user = $_SESSION["user"];
 ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
       echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
       exit();
     }
-
     mysqli_select_db($db, 'example' );
+$s ="select * from customer where user = '$user'";
+$t = mysqli_query($db,$s) or die (mysqli_error($db));
+$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+$zipcode = $r["zipcode"];
+
 $a1 = array();
 $movie = mysqli_real_escape_string($db,$movie);
 
-$s = "select showtimes.theatre_name, showtimes.time, showtimes.link from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= '$movie' and showtimes.date = '2018-04-25' and theatres.zipcode = '07011'";
+$s = "select showtimes.theatre_name, showtimes.time, showtimes.link from theatres JOIN showtimes on theatres.theatre_name = showtimes.theatre_name where showtimes.title= '$movie' and showtimes.date = '$date' and theatres.zipcode = '$zipcode'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
         {

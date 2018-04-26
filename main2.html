@@ -220,6 +220,19 @@ div.scrollmenu a:hover {
     background-color: #777;
 }
 
+form.ws-validate{
+        float:left;
+	
+        padding-left: 20px;
+	padding-top: 15px;
+    display: inline-flex;
+  }
+
+  .form-row.show-inputbtns {
+        margin-right: 10px;
+  }
+
+
 
 </style>
 
@@ -245,8 +258,9 @@ div.scrollmenu a:hover {
 		success: function(data)//should be data
 
 	{ var pd = JSON.parse(data);
-          $(document.body).append('<p>Found ' + pd.length + ' movies showing within 5 miles of your zipcode ' + ':</p>');
-          $.each(pd, function() {
+	$(document.body).append('<h1> Welcome, ' + pd.firstname +'. </h1>');
+          $(document.body).append('<p>Found ' + pd.info.length + ' movies playing within 5 miles near you (' + pd.zipcode +')</p>');
+          $.each(pd.info, function() {
 		var encoded = encodeURI(this.title);
                 var movieData = '<div class="tile"><img src="' + this.photo + '"><br/> <a href="newtheatre.html?title=' + encoded + '"> <span class ="link-spanner"></span> </a>  ';//DB CHECK if right
                 movieData += this.title;
@@ -275,16 +289,31 @@ div.scrollmenu a:hover {
    <body>
 
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
+  <div class="container-fluid" >
     <div class="navbar-header">
       <a class="navbar-brand" href="main2.html">CAN WE COME UP WITH A NAME LMAO</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="main2.html">Home</a></li>
+      <li class="active" ><a style="height:100%;" href="main2.html">Home</a></li>
     </ul>
+	
+
+	<form action="" class="ws-validate">
+
+    	   <div class="form-row show-inputbtns" >
+              <input type="date"  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
+        "inline": true
+}' />
+    	   </div>
+    	<div class="form-rows"></div>
+	</form>
+
+	 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px;"  placeholder = "Zipcode" required >
+	<button type="submit" id = "A" style="position: relative;" > Click for results </button>
+
+
+
     <ul class="nav navbar-nav navbar-right">
-      <!--<button class="flat" data-toggle="modal" data-target="#MyModal"> Sign Up</button>-->
-      <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
       <li><a href="main.html" class="trigger-btn glyphicon glyphicon-log-out" >Logout</a></li>
     </ul>
   </div>

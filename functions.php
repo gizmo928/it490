@@ -65,6 +65,7 @@ ini_set("allow_url_fopen",1);
     }
    
     mysqli_select_db($db, 'example' );
+//$date = "2018-04-26";
 $s = "Select * from customer where user = '$user'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
@@ -76,7 +77,7 @@ $json = file_get_contents($url);
 $m = json_decode($json, true); // was $m
 $title = array();
 $releaseDate= array();
-$genre = array();
+//$genre = array();
 $photoURL = array();
 $purchLink = array();
 $desc= array();
@@ -94,12 +95,26 @@ $num = mysqli_num_rows($t);
           {
  		$title[$x] = $m[$x]["title"];
 		$title[$x] = mysqli_real_escape_string($db, $title[$x]);
+		if(isset($m[$x]["releaseDate"]))
+		{	
          	$releaseDate[$x] = $m[$x]["releaseDate"];
-		 $someArray = $m[$x]["genres"];
-                foreach($someArray as $value)
-                {
-		mysqli_query($db, "Insert into movie_genre (title, genre) values ('$title[$x]', '$value')"); //surprisingly this works
-                }
+		$releaseDate[$x] = "'$releaseDate[$x]'";
+		}
+		else
+		{$releaseDate[$x] = "NULL";}
+
+		if(isset($m[$x]["genres"]))
+		{
+		   $someArray = $m[$x]["genres"];
+                   foreach($someArray as $value)
+                    {
+		      mysqli_query($db, "Insert into movie_genre (title, genre) values ('$title[$x]', '$value')"); 
+                    }
+		}
+		else
+		{$value= "NULL"; // no purpose for genre output to html for now, just to get rid of errors
+		 mysqli_query($db, "Insert into movie_genre (title, genre) values ('$title[$x]', $value)");	}
+
 		$desc[$x]= $m[$x]["longDescription"];
 		$desc[$x] = mysqli_real_escape_string($db,$desc[$x]);
 		if(isset($m[$x]["ratings"][0]["code"])){
@@ -110,7 +125,7 @@ $num = mysqli_num_rows($t);
 		$hours[$x] = substr($runTime[$x], 2, 3);
 		$mins[$x] = substr($runTime[$x], 5, 6);
 
-         	$genre[$x] = $m[$x]["genres"][0];
+  //       	$genre[$x] = $m[$x]["genres"][0];
          	$photoURL[$x] = "http://developer.tmsimg.com/"  . $m[$x]["preferredImage"]["uri"] . "?api_key=54jmnjmpmgek7ydjy7984zxq";
 
 		 $STarray = $m[$x]["showtimes"];
@@ -148,12 +163,11 @@ $num = mysqli_num_rows($t);
         	$t = $title[$z];
        		$p = $photoURL[$z];
         	$r = $releaseDate[$z];
-		$g = $genre[$z];
-		$pu = $purchLink[$z];
-        	mysqli_query($db, "Insert into movie (title, photo, releaseDate, date_stored, zipcode)  values('$t','$p', '$pu','$date','$zipcode')") or die(mysqli_error($db));
+		//$pu = $purchLink[$z];
+        	mysqli_query($db, "Insert into movie (title, photo, date_stored, zipcode)  values('$t','$p','$date','$zipcode')") or die(mysqli_error($db));
 	// maybe we can use the movie tables to check which queries went through i.e zipcode and date	
 
-		mysqli_query($db, "Insert into movie_info (title, photo, release_date, mpaa, hours, mins, description) values ('$title[$z]', '$photoURL[$z]', '$releaseDate[$z]',$rating[$z], '$hours[$z]', '$mins[$z]', '$desc[$z]') ON DUPLICATE KEY UPDATE title=title") or die (mysqli_error($db));
+		mysqli_query($db, "Insert into movie_info (title, photo, release_date, mpaa, hours, mins, description) values ('$title[$z]', '$photoURL[$z]', $releaseDate[$z],$rating[$z], '$hours[$z]', '$mins[$z]', '$desc[$z]') ON DUPLICATE KEY UPDATE title=title") or die (mysqli_error($db));
 
         }
     }
@@ -173,6 +187,7 @@ $s = "Select * from customer where user = '$user'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
 $zipcode = $r['zipcode'];
+$fname= $r['firstname'];
 $a0 =array();
 $s=" select distinct movie_info.title, movie_info.photo from movie_info join showtimes on movie_info.title = showtimes.title join theatres on showtimes.theatre_name = theatres.theatre_name where showtimes.date = '$date' and theatres.zipcode = '$zipcode'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
@@ -181,7 +196,8 @@ while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
 	 array_push($a0, array("title" => $r["title"], "photo" => $r["photo"]));
         }
 
-return $a0;
+//return $a0;
+return array("info" => $a0, "firstname" => $fname, "zipcode" => $zipcode);
 }
 
 function stData($date, $zipcode, $movie)
