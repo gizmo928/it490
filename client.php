@@ -81,7 +81,7 @@ function apicall($date,$zipcode){
 }
 
 
-function getData($date,$zipcode){
+function getData($date,$user,$zipcode){
     $client = new rabbitMQClient("testRabbitMQ.ini","testServer");
     if (isset($argv[1]))
     {
@@ -90,6 +90,7 @@ function getData($date,$zipcode){
     $request = array();
     $request['type'] = "getData";
     $request['today'] = $date;
+    $request['user'] = $user;
     $request['zipcode'] = $zipcode;
     $response1 = $client->send_request($request);
     return $response1;

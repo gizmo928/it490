@@ -250,40 +250,55 @@ form.ws-validate{
       <script>
          
          $(document).ready(function() {
-         
-           // send off the query
+	
            $.ajax({
 		type: "GET",
          	url: "location.php",
 		success: function(data)//should be data
-
 	{ var pd = JSON.parse(data);
-	$(document.body).append('<h1> Welcome, ' + pd.firstname +'. </h1>');
-          $(document.body).append('<p>Found ' + pd.info.length + ' movies playing within 5 miles near you (' + pd.zipcode +')</p>');
-          $.each(pd.info, function() {
-		var encoded = encodeURI(this.title);
-                var movieData = '<div class="tile"><img src="' + this.photo + '"><br/> <a href="newtheatre.html?title=' + encoded + '"> <span class ="link-spanner"></span> </a>  ';//DB CHECK if right
-                movieData += this.title;
-                if (this.ratings) { movieData += ' (' + this.ratings[0].code + ') </div>' };
-                $(document.body).append(movieData);
-          });
-         },
+	  $(".fill").append('<h1> Welcome, ' + pd.firstname +'. </h1>');
+          $(".fill").append('<p>Found ' + pd.info.length + ' movies playing within 5 miles near you (' + pd.zipcode +')</p>');
+          $.each(pd.info, function() 
+	    {
+	  var encoded = encodeURI(this.title);
+          var movieData = '<div class="tile"><img src="' + this.photo + '"><br/> <a href="newtheatre.html?title=' + encoded + '"> <span class ="link-spanner"></span> </a>  ';//DB CHECK if right
+          movieData += this.title;
+          if (this.ratings) { movieData += ' (' + this.ratings[0].code + ') </div>' };
+          $(".fill").append(movieData);
+            }); //each function
+        }, // success
 
-           });
-         });
-         
-         // callback to handle the results
-        /* function dataHandler(data) {
-          $(document.body).append('<p>Found ' + data.length + ' movies showing within 5 miles of ' + zipCode+':</p>');
-          var movie = data.hits;
-          $.each(data, function(index, movie) {
-         	var movieData = '<div class="tile"><img src="http://developer.tmsimg.com/' + movie.preferredImage.uri + '?api_key='+apikey+'"><br/> <a href="newtheatre.html"> <span class ="link-spanner"></span> </a>  ';
-         	movieData += movie.title;
-         	if (movie.ratings) { movieData += ' (' + movie.ratings[0].code + ') </div>' };
-         	$(document.body).append(movieData);
-          });
-         }*/
-           
+                 }); // ajax
+  
+
+
+ $("#A").click(function(){
+$(".fill").empty();  
+        var s = $("#zip").val();
+        var o = $("#special").val();    
+            $.ajax ({ 
+                  
+                        type: "GET",
+                        url: "location.php",
+                        data: "u=" +o +"&uu="+s ,                       
+                               
+                        error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
+                        success: function(dataa){	var pd = JSON.parse(dataa);
+        $(".fill").append('<h1> Welcome, ' + pd.firstname +'. </h1>');
+        $(".fill").append('<p>Found ' + pd.info.length + ' movies playing within a bajillion miles near (' + pd.zipcode +')</p>');
+        $.each(pd.info, function() 
+	  {
+          var encoded = encodeURI(this.title);
+          var movieData = '<div class="tile"><img src="' + this.photo + '"><br/> <a href="newtheatre.html?title=' + encoded + '"> <span class ="link-spanner"></span> </a>  ';//DB CHECK if right
+          movieData += this.title;
+          if (this.ratings) { movieData += ' (' + this.ratings[0].code + ') </div>' };
+          $(".fill").append(movieData);
+          }); // each
+	        	}, //success
+	 		});//ajax
+         }); // click
+}); // document
+
       </script>
    </head>
    <body>
@@ -296,22 +311,18 @@ form.ws-validate{
     <ul class="nav navbar-nav">
       <li class="active" ><a style="height:100%;" href="main2.html">Home</a></li>
     </ul>
-	
 
 	<form action="" class="ws-validate">
-
     	   <div class="form-row show-inputbtns" >
-              <input type="date"  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
+              <input type="date" required  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
         "inline": true
 }' />
     	   </div>
     	<div class="form-rows"></div>
-	</form>
-
+</form>
 	 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px;"  placeholder = "Zipcode" required >
-	<button type="submit" id = "A" style="position: relative;" > Click for results </button>
-
-
+	<button type="button" id = "A" style="position: relative;" > Click for results </button>
+	
 
     <ul class="nav navbar-nav navbar-right">
       <li><a href="main.html" class="trigger-btn glyphicon glyphicon-log-out" >Logout</a></li>
@@ -319,7 +330,8 @@ form.ws-validate{
   </div>
 </nav>
 
-
+   <div class="fill"></div>
    </body>
+
 </html>
 

@@ -53,25 +53,21 @@ print "Thankss";
 }
 
 
-function store_data($date, $user)// this will be user not zipcode, get zip from mysql
+function store_data($date, $zipcode)// this will be user not zipcode, get zip from mysql
 {
 ini_set("allow_url_fopen",1);
 
- ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
+
+($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
       echo"Failed to connect to MYSQL<br><br> ". mysqli_connect_error();
       exit();
     }
-   
     mysqli_select_db($db, 'example' );
-//$date = "2018-04-26";
-$s = "Select * from customer where user = '$user'";
-$t = mysqli_query($db,$s) or die (mysqli_error($db));
-$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
-$zipcode = $r['zipcode'];
-$zipcode ="$zipcode";
-//$_SESSION["zipcode"] = $zipcode;
+
+
+   
 $url = "http://data.tmsapi.com/v1.1/movies/showings?startDate=$date&zip=$zipcode&api_key=54jmnjmpmgek7ydjy7984zxq";
 $json = file_get_contents($url);
 $m = json_decode($json, true); // was $m
@@ -173,7 +169,7 @@ $num = mysqli_num_rows($t);
     }
 }
 
-function retrieveData($date, $user){
+function retrieveData($date, $user,$zipcode){
 ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
@@ -186,7 +182,7 @@ function retrieveData($date, $user){
 $s = "Select * from customer where user = '$user'";
 $t = mysqli_query($db,$s) or die (mysqli_error($db));
 $r = mysqli_fetch_array($t, MYSQLI_ASSOC);
-$zipcode = $r['zipcode'];
+//$zipcode = $r['zipcode'];
 $fname= $r['firstname'];
 $a0 =array();
 $s=" select distinct movie_info.title, movie_info.photo from movie_info join showtimes on movie_info.title = showtimes.title join theatres on showtimes.theatre_name = theatres.theatre_name where showtimes.date = '$date' and theatres.zipcode = '$zipcode'";
@@ -196,25 +192,11 @@ while ($r = mysqli_fetch_array($t, MYSQLI_ASSOC))
 	 array_push($a0, array("title" => $r["title"], "photo" => $r["photo"]));
         }
 
-//return $a0;
 return array("info" => $a0, "firstname" => $fname, "zipcode" => $zipcode);
 }
 
 function stData($date, $zipcode, $movie)
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
@@ -238,7 +220,7 @@ function requestProcessor($request)
 	case "apicall":
 	 return store_data($request['today'],$request['zipcode']);
 	case "getData": 
-	  return retrieveData($request['today'],$request['zipcode']);
+	  return retrieveData($request['today'],$request['user'],$request['zipcode']);
       }
       return array("returnCode" => '0', 'message'=>"Server received request and processed");
     }
