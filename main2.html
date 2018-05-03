@@ -13,7 +13,7 @@ if(!isset($_SESSION["user"]))
 
 <link rel="stylesheet" type="text/css" href="css/styles.css">
 <link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet"> 
-  <title>Bootstrap Example</title>
+  <title>Book My Movie</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -234,6 +234,7 @@ form.ws-validate{
 
 
 
+
 </style>
 
 
@@ -305,33 +306,49 @@ $(".fill").empty();
 
 <nav class="navbar navbar-inverse">
   <div class="container-fluid" >
-    <div class="navbar-header">
-      <a class="navbar-brand" href="main2.html">CAN WE COME UP WITH A NAME LMAO</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active" ><a style="height:100%;" href="main2.html">Home</a></li>
-    </ul>
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="main2.html">BookMyMovie</a>
+	    </div>
+	    <ul class="nav navbar-nav">
+	      <li class="active" ><a style="height:100%;" href="main2.html">Home</a></li>
+	    </ul>
 
-	<form action="" class="ws-validate">
-    	   <div class="form-row show-inputbtns" >
-              <input type="date" required  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
-        "inline": true
-}' />
-    	   </div>
-    	<div class="form-rows"></div>
-</form>
-	 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px;"  placeholder = "Zipcode" required >
-	<button type="button" id = "A" style="position: relative;" > Click for results </button>
+
+
 	
 
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="main.html" class="trigger-btn glyphicon glyphicon-log-out" >Logout</a></li>
-    </ul>
+	<div id="parent">
+		<form action="" class="ws-validate">
+	    	   <div class="form-group" >
+			<div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span> </span>
+		      <input type="date" style="position: relative; margin-right: 10px; height:34px; width:180px;" value ="<?php echo date('Y-m-d'); ?>" required  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
+		"inline": true 
+}' />
+
+			</div> <br>
+	    	
+	    	
+		</form>
+
+		<div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span> </span>
+			 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px; height: 34px;"  placeholder = "Zipcode" required >
+
+		</div><br>
+			<button type="button" id = "A" style="position: relative;" > Go</button>
+		
+
+		    <ul class="nav navbar-nav navbar-right">
+		      <li><a href="main.html" class="trigger-btn glyphicon glyphicon-log-out"> Logout</a></li>
+		    </ul>
+	 	 </div>
+
+	</div>
   </div>
 </nav>
 
    <div class="fill"></div>
-   </body>
+
+</body>
 
 </html>
 
