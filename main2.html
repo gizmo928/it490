@@ -258,7 +258,7 @@ form.ws-validate{
 		success: function(data)//should be data
 	{ var pd = JSON.parse(data);
 	  $(".fill").append('<h1> Welcome, ' + pd.firstname +'. </h1>');
-          $(".fill").append('<p>Found ' + pd.info.length + ' movies playing within 5 miles near you (' + pd.zipcode +')</p>');
+          $(".fill").append('<p>There are ' + pd.info.length + ' movies playing within a 5 mile radius near you (' + pd.zipcode +')</p>');
           $.each(pd.info, function() 
 	    {
 	  var encoded = encodeURI(this.title);
@@ -286,7 +286,7 @@ $(".fill").empty();
                         error: function(xhr, status, error) {alert( "error Message: \r\nNumeric code is: " + xhr.status + " \r\nError is " + error );},
                         success: function(dataa){	var pd = JSON.parse(dataa);
         $(".fill").append('<h1> Welcome, ' + pd.firstname +'. </h1>');
-        $(".fill").append('<p>Found ' + pd.info.length + ' movies playing within a bajillion miles near (' + pd.zipcode +')</p>');
+        $(".fill").append('<p>There are ' + pd.info.length + ' movies playing within a 5 mile radius near (' + pd.zipcode +')</p>');
         $.each(pd.info, function() 
 	  {
           var encoded = encodeURI(this.title);
@@ -324,25 +324,25 @@ $(".fill").empty();
 		      <input type="date" style="position: relative; margin-right: 10px; height:34px; width:180px;" value ="<?php echo date('Y-m-d'); ?>" required  id="special" name="u" data-date-inline-picker="false" data-date-popover='{
 		"inline": true 
 }' />
-
-			</div> <br>
+		       </div> </div>
 	    	
 	    	
 		</form>
+		<div style="padding-top: 15px;">
 
 		<div class="input-group"> <span class="input-group-addon"><span class="glyphicon glyphicon-map-marker"></span> </span>
-			 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px; height: 34px;"  placeholder = "Zipcode" required >
-
-		</div><br>
-			<button type="button" id = "A" style="position: relative;" > Go</button>
+			 <input type =text name="uu" id = "zip" style="position: relative; margin-right: 10px; height: 34px; width:180px;"  placeholder = "Zipcode" required >
+			<button type="button" id = "A"  > Go</button> 
 		
+		</div></div>
+			
 
 		    <ul class="nav navbar-nav navbar-right">
 		      <li><a href="main.html" class="trigger-btn glyphicon glyphicon-log-out"> Logout</a></li>
 		    </ul>
-	 	 </div>
+	         </div>
 
-	</div>
+	
   </div>
 </nav>
 
