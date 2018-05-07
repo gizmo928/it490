@@ -33,7 +33,7 @@ if(!isset($_SESSION["user"]))
   <title></title>
 
 <script type="text/javascript">
- var movie = "<?php $movie = $_GET['title']; echo $movie ?>";
+ var movie = "<?php session_start();  $movie = $_GET['title']; $_SESSION['title'] = $movie; echo $movie ?>";
 
 $(window).load(function(){
  $.ajax ({ 
@@ -65,7 +65,7 @@ if(rating == null || rating == "")
 rating = "NR";
 }//havent test this out
 $("#rNrt").html(rating + ', ' + parsed_result["b"][0]["hours"] +  '&ensp;' + parsed_result["b"][0]["mins"]  );
-
+$("#review").html('<a href="forum.html?title=' + encodeURI(parsed_result["b"][0]["title"]) + '">Review</a>');
  
 $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatre names, showtimes, and purchase links )
 {
@@ -152,6 +152,7 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
   <p id = "rd" > </p>
   <p id = "rNrt"></p>
   <p id ="desc"> </p>
+<p id= "review"> <a href="forum.html" >Review</a> </p>
  <table class="table table-hover">
               <thead>
                 <tr>
@@ -171,7 +172,7 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
             </table>
 
 
-  
+</div>  
   <script>
   // tell the embed parent frame the height of the content
   if (window.parent && window.parent.parent){
