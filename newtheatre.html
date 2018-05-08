@@ -28,12 +28,19 @@ if(!isset($_SESSION["user"]))
 
   <style type="text/css">
     .template { display: none; }
+
+
+	h2,p {
+		padding-left:24%;
+	}
   </style>
 
   <title></title>
 
 <script type="text/javascript">
- var movie = "<?php session_start();  $movie = $_GET['title']; $_SESSION['title'] = $movie; echo $movie ?>";
+ var movie = "<?php session_start();  $movie = $_GET['title']; $_SESSION['title'] = $movie; echo $movie; ?>";
+var day = "<?php session_start(); $date = $_SESSION['date']; echo $date; ?>";
+var user = "<?php session_start(); $user = $_SESSION['user']; echo $user; ?>";
 
 $(window).load(function(){
  $.ajax ({ 
@@ -71,7 +78,7 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 {
         var theatre =this["theatre"];
         var showtime = "";
-	var link1 = "<a href='";	
+	var link1 = "<a href='purchase.html?";	
         for (var i = 0; i < this["showtimes"].length; i++)
         { //if this[link][i] == null then skip? else configure it through html 
 	   var h = "AM";
@@ -85,25 +92,17 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 		    	if(splitter[0] > 12)
 	    		{splitter[0]= splitter[0] - 12;}
 	    	h = "PM"; 
-	      		if(this["link"][i] == null) // leave it blank else add the html and do the same for the bottom half duplicate it
-			{showtime += splitter[0] + ':' + splitter[1] + h + '&emsp;';}
-			else 
-			{showtime += link1 + this["link"][i] + "'>" + splitter[0] + ':' + splitter[1] + h  + '</a>' + '&emsp;';}
+			showtime += link1 + 'title='+ movie + '&date=' +day + '&showtime=' +splitter[0]+ ':' + splitter[1] + '&user='+ user  + "'>" + splitter[0] + ':' + splitter[1] + h  + '</a>' + '&emsp;';
 			
 	  	 }
 
 
 		else if(splitter[0] == 0)
                 {
-                        if(this["link"][i] == null)
-                        {showtime += ("12:" + splitter[1]) ;
 
-                        showtime = showtime + h + '&emsp;';} // if no link then just 12:00AM
-                        else
-                        {showtime += ("12:" + splitter[1]) ;
+                        showtime +=  link1 + 'title='+ movie + '&date=' +day + '&showtime=' + '12:' + splitter[1] + '&user='+ user  + "'>"+ "12:" + splitter[1] + h + '</a>' + '&emsp;';} // if no link then just 12:00AM
 
-                        showtime = link1 + this["link"][i] + "'>" + showtime + h  + '</a>' + '&emsp;';}   //had showtime +=, works currently without it 
-                } 
+                 
 
 
 
@@ -112,15 +111,10 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 
 	  	else
 	  	{
-			if(this["link"][i] == null)
-           		{showtime += (this["showtimes"][i]  ) ;
 
-			showtime = showtime + h + '&emsp;';} // if no link then just 12:00AM
-			else
-			{//showtime += this["showtimes"][i]  ;
+			showtime += link1 + 'title='+ movie + '&date=' + day + '&showtime=' +splitter[0]+ ':' + splitter[1] + '&user='+ user  + "'>"+  this["showtimes"][i] + h + '</a>' + '&emsp;';} // if no link then just 12:00AM
 
-			showtime += link1 + this["link"][i] + "'>" + this["showtimes"][i] + h   + '</a>' + '&emsp;';}   //had showtime +=, works currently without it 
-          	} 
+          	 
 
 	}
 
@@ -143,7 +137,7 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 <body>
 
 
-
+<br>
 
 
 <div class="container">
