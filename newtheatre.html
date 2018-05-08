@@ -83,9 +83,6 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
         { //if this[link][i] == null then skip? else configure it through html 
 	   var h = "AM";
 	   var splitter = this["showtimes"][i].split(":"); // split to get hours alone
-	
-	   //if(this["link"][i] == null)
-		 
 
 	   	if (splitter[0] >=12)
 	   	{
@@ -93,32 +90,19 @@ $.each(parsed_result.a, function() // .a works same as ["a"] (.a contains theatr
 	    		{splitter[0]= splitter[0] - 12;}
 	    	h = "PM"; 
 			showtime += link1 + 'title='+ movie + '&date=' +day + '&showtime=' +splitter[0]+ ':' + splitter[1] + '&user='+ user  + "'>" + splitter[0] + ':' + splitter[1] + h  + '</a>' + '&emsp;';
-			
 	  	 }
-
 
 		else if(splitter[0] == 0)
                 {
 
                         showtime +=  link1 + 'title='+ movie + '&date=' +day + '&showtime=' + '12:' + splitter[1] + '&user='+ user  + "'>"+ "12:" + splitter[1] + h + '</a>' + '&emsp;';} // if no link then just 12:00AM
 
-                 
-
-
-
-
-
-
 	  	else
 	  	{
-
 			showtime += link1 + 'title='+ movie + '&date=' + day + '&showtime=' +splitter[0]+ ':' + splitter[1] + '&user='+ user  + "'>"+  this["showtimes"][i] + h + '</a>' + '&emsp;';} // if no link then just 12:00AM
-
-          	 
 
 	}
 
-	
     $("tbody").append('  <tr> <td >' + theatre + '</td>  <td >' + showtime + '  </td><hr> </tr> <hr> ');
 });
 

@@ -7,6 +7,7 @@ if(!isset($_SESSION["user"]))
 $movie =  $_GET['title'];
 $date = $_SESSION["date"];
 $user = $_SESSION["user"];
+$zipcode = $_SESSION["zipcode"];
 ($db = mysqli_connect ( 'localhost', 'root', 'root', 'example' ) );
     if (mysqli_connect_errno())
     {
@@ -14,10 +15,10 @@ $user = $_SESSION["user"];
       exit();
     }
     mysqli_select_db($db, 'example' );
-$s ="select * from customer where user = '$user'";
-$t = mysqli_query($db,$s) or die (mysqli_error($db));
-$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
-$zipcode = $r["zipcode"];
+//$s ="select * from customer where user = '$user'";
+//$t = mysqli_query($db,$s) or die (mysqli_error($db));
+//$r = mysqli_fetch_array($t, MYSQLI_ASSOC);
+//$zipcode = $r["zipcode"];
 
 $a1 = array();
 $movie = mysqli_real_escape_string($db,$movie);
