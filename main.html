@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link rel="stylesheet" type="text/css" href="css/styles.css">
+<link href="https://fonts.googleapis.com/css?family=Audiowide" rel="stylesheet"> 
+  <title>Book My Movie</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<style type="text/css">
+    body {
+    font-family: Varela Round;
+    font-size: 20px;
+  }
+  .modal-login {    
+    color: #636363;
+    width: 350px;
+  }
+  .modal-login .modal-content {
+    padding: 20px;
+    border-radius: 5px;
+    border: none;
+  }
+  .modal-login .modal-header {
+    border-bottom: none;   
+        position: relative;
+        justify-content: center;
+  }
+  .modal-login h4 {
+    text-align: center;
+    font-size: 26px;
+    margin: 30px 0 -15px;
+  }
+  .modal-login .form-control:focus {
+    border-color: #70c5c0;
+  }
+  .modal-login .form-control, .modal-login .btn {
+    min-height: 40px;
+    border-radius: 3px; 
+  }
+  .modal-login .close {
+        position: absolute;
+    top: -5px;
+    right: -5px;
+  } 
+  .modal-login .modal-footer {
+    background: #ecf0f1;
+    border-color: #dee4e7;
+    text-align: center;
+        justify-content: center;
+    margin: 0 -20px -20px;
+    border-radius: 5px;
+    font-size: 13px;
+  }
+  .modal-login .modal-footer a {
+    color: #999;
+  }   
+  .modal-login .avatar {
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: -70px;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    z-index: 9;
+    background: #60c7c1;
+    padding: 15px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  }
+  .modal-login .avatar img {
+    width: 100%;
+  }
+  .modal-login.modal-dialog {
+    margin-top: 80px;
+  }
+    .modal-login .btn {
+        color: #fff;
+        border-radius: 4px;
+    background: #60c7c1;
+    text-decoration: none;
+    transition: all 0.4s;
+        line-height: normal;
+        border: none;
+    }
+  .modal-login .btn:hover, .modal-login .btn:focus {
+    background: #45aba6;
+    outline: none;
+  }
+  .trigger-btn {
+    display: inline-block;
+    margin: 10px auto;
+  }
+    .modal-dialog {
+  width: 400px;
+}
+.modal-content {
+  width: 400px;
+}
+.modal-body{
+  padding-left: 50px;
+  padding-right:50px;
+  width:auto;
+  height: auto;
+}
+button{
+  display: inline-block;
+  margin:0 5px 0 0;
+  padding:15px 30px;
+  font-size: 24px;
+  line-height: 0.9;
+  appearance:none;
+  box-shadow: none;
+  border-radius: 0;
+  -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+button.flat{
+  color:#fff;
+  background-color: #00d3a3;
+  text-shadow:-1px 1px #417cb8;
+  border: none;
+}
+button.flat:hover{
+  background-color: #00b180;
+  text-shadow:-1px 1px #27496d;
+}
+button.flat:active{
+background-color: #00b180;
+text-shadow:-1px 1px #193047;
+}
+#email{
+  width:340px;
+  height:40px;
+}
+.inline-actions{
+  position: absolute;
+  right: 0;
+  bottom: 20px;
+  z-index: 1;
+  overflow: hidden;
+}
+.check-icn{
+  background: url(../assets/icons/checkmark-sm.png) center center no-repeat;
+  width:34px; 
+    height:34px;
+}
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon button {
+    position: absolute;
+    right: -5px;
+    pointer-events: none;
+}
+#search{
+}
+button.success,button.create{
+  background-color: #00d3a3;
+}
+button.fail{
+  background-color: #ffc000;
+}
+button.create{
+  background-color: #00d3a3;
+  color:#fff;
+}
+button.create:hover, button.create:active{
+  background-color: #00b180;
+  color:#fff;
+}
+input[type="text"], input[type="email"],input[type="password"]{
+  background-color : #f7f7f7; 
+  outline: none;
+  border: 2px solid #e7e7e7 !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+input[type="text"]:focus, input[type="email"]:focus,input[type="password"]:focus{
+  background-color : #e7e7e7; 
+  outline: none;
+  border: 2px solid #e7e7e7 !important;
+  -webkit-box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  box-shadow: none !important;
+}
+/*.full-bg {
+  width: 100%;
+  height: 100%;
+  background-image: url("avengers-infinity-war.jpg");
+  background-size: cover;
+  background-position: center;
+  padding: 1px;
+  box-sizing: border-box;
+  display: flex;
+}
+.poster-content{
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 16px;
+  box-sizing: border-box;
+  margin:auto;
+  width: 650px;
+  text-align: center;
+}
+.poster-content header{
+  display: inline-block;
+}
+@font-face {
+  font-family: avengersFont;
+  src: url("../fonts/AvengeanceHeroicAvengerNormal.woff") format("woff");
+}
+.poster-content header h1 {
+  color: #fff;
+  font-size: 48px;
+  margin: 16px 8px 0;
+  font-family: avengersFont;
+}
+.poster-content header h2 {
+  color: #fff;
+  border-top: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  margin-top: 0;
+  font-family: 'Audiowide', cursive;
+  letter-spacing: 1px;
+  font-size: 26px;
+}
+.poster-content iframe{
+  width: 100%;
+  height: 315px;
+  border: 2px solid #ddd;
+  box-sizing: border-box;
+}
+.poster-content .release-date{
+  font-size: 18px;
+  color: #fff;
+  font-family: 'Audiowide', cursive;
+  margin-bottom: 8px;
+}
+p {
+  text-align: center;
+  font-size: 30px;
+  margin-top:0px;
+  color: white;
+}*/
+div.scrollmenu {
+    background-color: white;
+    overflow: auto;
+    white-space: nowrap;
+}
+div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
+div.scrollmenu a:hover {
+    background-color: white;
+}
+</style>
+        
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a style="font-size:30px; padding-top:20px;" class="navbar-brand" href=".">BookMyMovie</a>
+    </div>
+  
+    <ul class="nav navbar-nav navbar-right">
+      <!--<button class="flat" data-toggle="modal" data-target="#MyModal"> Sign Up</button>-->
+      <li><a href="#MyModal" class="glyphicon glyphicon-user"data-toggle="modal" style="margin-top:8px;" > Sign Up</a></li>
+      <!--<li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
+      <li><a href="#myModal" class="trigger-btn glyphicon glyphicon-log-in" data-toggle="modal"> Login</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="container"  style="background-color: white;">
+        <div class="shoveler-wrapper" align="center"> <h2 class="large-heading">Coming Soon to Theaters</h2> 
+        <div class="scrollmenu" style="background-color: black;">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/208387/images/masterrepository/fandango/208387/missionimpossiblefallout2018.jpg">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/199925/images/masterrepository/fandango/199925/avengersinfinitywar-postera.jpg">
+ <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/210351/images/masterrepository/fandango/210351/tag2018.jpg">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/203382/images/masterrepository/fandango/203382/jurassicworldfallenkingdom-posterart.jpg">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/208536/images/masterrepository/fandango/208536/slndr_6.75x10_online_tsr_1sht.jpg">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/208487/images/masterrepository/fandango/208487/overboard_1sht_payoff_finis.jpg">
+  <img src="https://images.fandango.com/r1.0.425/ImageRenderer/168/250/redesign/static/img/default_poster.png/200520/images/masterrepository/fandango/200520/untitleddeadpoolsequel2018.jpg">
+</div>
+
+
+        </div>
+    </div>
+
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+  <div class="modal-dialog modal-login">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="avatar">
+          <img src="/examples/images/avatar.png" alt="">
+        </div>        
+        <h4 class="modal-title">Member Login</h4> 
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form action="login.php" method="POST">
+          <div class="form-group">
+            <input type="text" class="form-control" name="username" placeholder="Username" required="required">   
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Password" required="required"> 
+          </div>        
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block login-btn">Login</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#">Forgot Password?</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel" style="color:#9a9a9a;font-family:Mailpile-Normal;">Sign Up</h4>
+            </div>
+            <div class="modal-body" style="text-align:left;">
+                <form role="form" id="signup" action="register.php" method="POST">
+                
+                    <div class ="form-group">
+                        <p class="text-muted">First name *</p>
+                        <div class="right-inner-addon ">
+                          <input size="35" id="user_name" name="fName" type="text" class="form-control"placeholder="Enter your first name" />
+                        </div>
+                    </div>
+		
+		 <div class ="form-group">
+                        <p class="text-muted">Last name *</p>
+                        <div class="right-inner-addon ">
+                          <input size="35" id="user_name" name="lName" type="text" class="form-control"placeholder="Enter your last name" />
+                        </div>
+                    </div>
+
+                    
+                    <div class ="form-group">
+                        <p class="text-muted">Username *</p>
+                        <div class="right-inner-addon ">
+                          <button style="display:none" class="success btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+                          <button style="display:none" class="fail btn btn-warning"><span class="glyphicon glyphicon-flash"></span></button>
+                          <input size="35" id="user_name" name="user" type="text" class="form-control"placeholder="choose a cool name" />
+                        </div>
+                    </div>
+                    
+                    <div class ="form-group">
+                        <p class="text-muted">Email *</p>
+                        <div class="right-inner-addon ">
+                            <button style="display:none" class="success btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+                            <button style="display:none" class="fail btn btn-warning"><span class="glyphicon glyphicon-flash"></span></button>
+                            <input size="35" id="user_email" name="email" type="email" class="form-control"placeholder="yourname@example.com" />
+                          </div>
+                      </div>
+  
+                      <div class ="form-group">
+                          <p class="text-muted">Password *</p>
+                          <div class="right-inner-addon ">
+                              <button style="display:none" class="success btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+                              <button style="display:none" class="fail btn btn-warning"><span class="glyphicon glyphicon-flash"></span></button>
+                             <input size="35" id="user_password" name="pass" type="password" class="form-control"placeholder="at least 6 characters" />
+                          </div>
+                      </div>
+			
+			<div class ="form-group">
+                          <p class="text-muted">Hometown Zipcode *</p>
+                          <div class="right-inner-addon ">
+                              <button style="display:none" class="success btn btn-success"><span class="glyphicon glyphicon-ok"></span></button>
+                              <button style="display:none" class="fail btn btn-warning"><span class="glyphicon glyphicon-flash"></span></button>
+                             <input size="35" id="user_password" name="zipcode" type="password" class="form-control"placeholder="i.e 12345" />
+                          </div>
+                      </div>
+
+
+
+                      <button class="btn btn-default create">CREATE MY ACCOUNT</button>
+                  </form>
+                </div><!--end of modal body-->
+            </div><!--end of modal content-->
+        </div><!--end of model dialog-->
+    </div><!--end of moal-->
+    <script>
+// Set the date we're counting down to
+/*var countDownDate = new Date("April 27, 2018 1:27:25").getTime();
+// Update the count down every 1 second
+var x = setInterval(function() {
+    // Get todays date and time
+    var now = new Date().getTime();
+    
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+    
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+    
+    // If the count down is over, write some text 
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "Now Playing";
+    }
+}, 1000);*/
+</script>
+</body>
+</html>
+
